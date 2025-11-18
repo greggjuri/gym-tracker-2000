@@ -8,11 +8,10 @@
     "dev": "nodemon server.js"
   },
   "keywords": ["gym", "workout", "tracker", "fitness"],
-  "author": "Juri Gregg",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "sqlite3": "^5.1.6",
     "cors": "^2.8.5"
   },
   "devDependencies": {
