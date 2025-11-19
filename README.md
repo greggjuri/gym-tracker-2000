@@ -1,12 +1,12 @@
 # 💪 Gym Tracker
 
-A modern, mobile-first workout tracking application with cloud synchronization across all your devices. Built with vanilla JavaScript and Node.js.
+A modern, mobile-first workout tracking application with persistent data storage. Built with vanilla JavaScript and PHP backend - perfect for single-user deployment on shared hosting.
 
 <div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
 ![Platform](https://img.shields.io/badge/platform-web%20%7C%20mobile-lightgrey.svg)
+![PHP](https://img.shields.io/badge/PHP-%3E%3D7.0-blue.svg)
 
 [Live Demo](#) | [Documentation](#installation) | [Report Bug](#) | [Request Feature](#)
 
@@ -28,11 +28,11 @@ A modern, mobile-first workout tracking application with cloud synchronization a
 - **Statistics Dashboard** - Total workouts, recent activity, exercise variety
 - **Exercise Summary** - See your most frequently performed exercises
 
-### 🔄 Cross-Device Synchronization
-- **Cloud Storage** - All data saved to remote server
-- **Multi-Device Access** - Desktop, laptop, tablet, and mobile
-- **Real-time Status** - Visual indicator shows connection state
-- **Simple Sync** - Just refresh to see updates from other devices
+### 💾 Data Persistence
+- **JSON File Storage** - Simple, persistent data storage on your web host
+- **No Database Required** - Just PHP and a writable folder
+- **Easy Backup** - Download your workout data as JSON anytime
+- **Portable** - Copy your data file anywhere
 
 ### 📱 Mobile-Optimized
 - **Responsive Design** - Looks great on any screen size
@@ -57,53 +57,34 @@ Perfect for:
 
 ### Prerequisites
 
-- Node.js 18.0.0 or higher
-- npm or yarn package manager
+- Web hosting with PHP support (PHP 7.0 or higher)
+- Writable directory for data storage
+- Modern web browser
 
-### Local Development
+### Installation on Shared Hosting (Hostinger, cPanel, etc.)
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/gym-tracker.git
-cd gym-tracker
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm start
-
-# Open your browser
-http://localhost:3000
-```
-
-### Deploy to Production
-
-#### Option 1: Render.com (Recommended - FREE)
-
-1. Fork this repository to your GitHub account
-2. Sign up at [Render.com](https://render.com)
-3. Create a new **Web Service**
-4. Connect your GitHub repository
-5. Use these settings:
+1. **Upload Files:**
    ```
-   Build Command: npm install
-   Start Command: npm start
+   public_html/
+   └── gym/  (or any folder name)
+       ├── index.html
+       ├── api.php
+       └── data/  (create this folder)
    ```
-6. Click **Deploy**
-7. Your app will be live at `https://your-app.onrender.com`
 
-#### Option 2: Custom Server
+2. **Set Permissions:**
+   - `data/` folder: 755 (read/write/execute for owner)
+   - `api.php`: 644 (readable)
 
-```bash
-# Install production dependencies
-npm install --production
+3. **Access Your App:**
+   - Visit: `https://yourdomain.com/gym/`
+   - The app will auto-create `workouts.json` on first save
 
-# Start the server
-NODE_ENV=production npm start
-```
+4. **Test Backend:**
+   - Visit: `https://yourdomain.com/gym/api.php?path=/api/health`
+   - Should see: `{"status":"ok","timestamp":"..."}`
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+That's it! No database setup required.
 
 ---
 
@@ -112,14 +93,15 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 ```
 gym-tracker/
 │
-├── public/
-│   └── index.html          # Frontend (HTML/CSS/JavaScript)
+├── index.html             # Frontend application
+├── api.php               # PHP backend API
 │
-├── server.js               # Backend API (Express + SQLite)
-├── package.json            # Dependencies and scripts
-├── .gitignore             # Git ignore rules
-├── DEPLOYMENT.md          # Detailed deployment guide
-└── README.md              # This file
+├── data/                 # Data storage (auto-created)
+│   └── workouts.json    # Your workout data
+│
+├── HOSTINGER-DEPLOYMENT.md      # Deployment guide
+├── CONNECTION-FAILED-FIX.md     # Troubleshooting
+└── README.md                     # This file
 ```
 
 ---
@@ -133,14 +115,14 @@ gym-tracker/
 - **Responsive Design** - Mobile-first approach
 
 ### Backend
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **SQLite3** - Lightweight database
-- **CORS** - Cross-origin resource sharing
+- **PHP** - Simple file-based API (no database!)
+- **JSON** - Lightweight data storage
+- **CORS Enabled** - Works from any domain
 
 ### Deployment
-- **Render.com** - Backend hosting (free tier available)
-- **Hostinger** - Optional custom domain hosting
+- **Hostinger** - Shared hosting (or any PHP host)
+- **cPanel** - Also compatible
+- **No database required** - Just file storage
 
 ---
 
@@ -173,25 +155,11 @@ bodyweight           # No external weight
 
 ---
 
-## 🎨 Screenshots
-
-### Mobile View
-*Clean, modern interface optimized for mobile devices*
-
-### Desktop View
-*Spacious layout for larger screens*
-
-### Exercise History
-*Filter and review your workout history*
-
-### Statistics Dashboard
-*Track your progress with visual stats*
-
----
-
 ## 🔌 API Documentation
 
 ### Endpoints
+
+All endpoints use the format: `/api.php?path=/api/{endpoint}`
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -206,13 +174,13 @@ bodyweight           # No external weight
 
 ```javascript
 // Create a new workout
-const response = await fetch('/api/workouts', {
+const response = await fetch('./api.php?path=/api/workouts', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    date: '2024-11-17',
+    date: '2024-11-18',
     exercise: 'Bench Press',
     sets: '3',
     reps: '10',
@@ -227,33 +195,14 @@ const response = await fetch('/api/workouts', {
 ```json
 {
   "id": 1,
-  "date": "2024-11-17",
+  "date": "2024-11-18",
   "exercise": "Bench Press",
   "sets": "3",
   "reps": "10",
   "weight": "60kg",
   "notes": "Felt strong today!",
-  "created_at": "2024-11-17T10:30:00.000Z"
+  "created_at": "2024-11-18T10:30:00+00:00"
 }
-```
-
----
-
-## 🛠 Configuration
-
-### Environment Variables
-
-```bash
-PORT=3000              # Server port (default: 3000)
-NODE_ENV=production    # Environment mode
-```
-
-### Frontend Configuration
-
-Edit `public/index.html` to set your backend API URL:
-
-```javascript
-const API_URL = 'https://your-backend-url.com/api';
 ```
 
 ---
@@ -278,28 +227,110 @@ The app will now open like a native mobile application!
 
 ---
 
+## 💾 Backup & Restore
+
+### Backup Your Data
+
+**Method 1: Download via Browser**
+Visit: `https://yourdomain.com/gym/api.php?path=/api/workouts`
+- Copy the JSON output
+- Save to a text file
+
+**Method 2: Download via File Manager**
+- Access your hosting file manager
+- Navigate to `gym/data/`
+- Download `workouts.json`
+
+**Recommendation:** Backup monthly!
+
+### Restore Data
+
+1. Access file manager
+2. Navigate to `gym/data/`
+3. Edit or replace `workouts.json`
+4. Ensure valid JSON format
+
+---
+
 ## 🔒 Security & Privacy
 
 ### Current Implementation
-- ✅ HTTPS encryption in transit
-- ✅ Data stored securely on server
-- ✅ SQL injection protection (parameterized queries)
+- ✅ PHP input validation
+- ✅ JSON encoding prevents injection
+- ✅ Data stored server-side
 - ⚠️ No user authentication (single-user app)
 
-### Future Enhancements
-Want to add user accounts? The app can be extended with:
-- User registration and login
-- JWT token authentication
-- Password hashing (bcrypt)
-- Role-based access control
+### Optional: Protect Data Folder
+
+Create `.htaccess` in `data/` folder:
+```apache
+Order Deny,Allow
+Deny from all
+```
+
+This prevents direct access to `workouts.json`.
+
+### Adding Password Protection (Optional)
+
+If you want to add authentication:
+1. Use PHP sessions
+2. Add login form
+3. Verify credentials before API access
+
+Let me know if you want this feature!
+
+---
+
+## 🐛 Troubleshooting
+
+### "Connection failed" error
+
+**Check these in order:**
+
+1. **Backend accessible?**
+   - Visit: `yourdomain.com/gym/api.php?path=/api/health`
+   - Should show: `{"status":"ok",...}`
+
+2. **Files in correct location?**
+   ```
+   gym/
+   ├── index.html  ✓
+   ├── api.php     ✓
+   └── data/       ✓ (must exist)
+   ```
+
+3. **Permissions correct?**
+   - `data/` folder: 755
+   - `api.php`: 644
+
+4. **PHP enabled?**
+   - Contact hosting support if backend shows PHP code instead of JSON
+
+5. **Browser cache?**
+   - Hard refresh: Ctrl+Shift+R (or Cmd+Shift+R)
+
+See [CONNECTION-FAILED-FIX.md](./CONNECTION-FAILED-FIX.md) for detailed troubleshooting.
+
+---
+
+## 💰 Cost Breakdown
+
+Running this app is **completely FREE** if you already have web hosting:
+
+| Service | Plan | Monthly Cost |
+|---------|------|--------------|
+| Web Hosting | Shared (Hostinger, etc.) | Already paid |
+| Database | None needed! | $0 |
+| **Total** | | **$0/month** |
+
+**No database fees, no external services, no hidden costs!**
 
 ---
 
 ## 🚧 Roadmap
 
 ### Planned Features
-- [ ] User authentication & multi-user support
-- [ ] Workout programs & templates
+- [ ] Workout programs & templates  
 - [ ] Progress charts & graphs
 - [ ] Rest timer between sets
 - [ ] Exercise library with instructions
@@ -307,51 +338,10 @@ Want to add user accounts? The app can be extended with:
 - [ ] Goals & achievement system
 - [ ] Export data (CSV/PDF)
 - [ ] Workout reminders
-- [ ] Progressive Web App (PWA) with offline support
+- [ ] Multi-user support with authentication
 
 ### Ideas & Suggestions
-Have a feature request? [Open an issue](#) or submit a pull request!
-
----
-
-## 🐛 Troubleshooting
-
-### First load is slow (~30 seconds)
-**Cause:** Render.com free tier spins down after 15 minutes of inactivity  
-**Solution:** This is normal! Subsequent loads will be instant. Upgrade to paid plan ($7/mo) for always-on service.
-
-### Data not syncing across devices
-**Cause:** Browser cache or incorrect API URL  
-**Solution:** 
-- Hard refresh (Ctrl+Shift+R or Cmd+Shift+R)
-- Verify API_URL in `index.html` points to your backend
-- Check browser console (F12) for errors
-
-### Can't save workouts
-**Cause:** Backend server not running or CORS issue  
-**Solution:**
-- Check if backend is deployed and running
-- Verify server logs on Render.com
-- Ensure CORS is enabled in `server.js`
-
-### More Help
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed troubleshooting.
-
----
-
-## 💰 Cost Breakdown
-
-Running this app is **completely FREE** for personal use:
-
-| Service | Plan | Monthly Cost |
-|---------|------|--------------|
-| Render.com | Free Tier | $0 |
-| Database | SQLite (included) | $0 |
-| **Total** | | **$0/month** |
-
-**Optional Upgrades:**
-- Render.com Paid Plan: $7/month (always-on, no spin-down)
-- Custom domain: ~$10-15/year
+Have a feature request? Open an issue or submit a pull request!
 
 ---
 
@@ -383,20 +373,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-Created with 💪 by [Your Name]
-
-### Connect
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Website: [yourwebsite.com](https://yourwebsite.com)
-- Email: your.email@example.com
+Created with 💪 for fitness enthusiasts
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Inspired by the need for a simple, effective workout tracker
-- Built with love for the fitness community
-- Thanks to all contributors and users!
+- Built for simplicity and practicality
+- No frameworks, no database, no complexity
+- Perfect for personal use
+- Thanks to all users and contributors!
 
 ---
 
@@ -404,10 +390,33 @@ Created with 💪 by [Your Name]
 
 Need help? Have questions?
 
-- 📖 [Read the Docs](./DEPLOYMENT.md)
-- 🐛 [Report a Bug](#)
-- 💡 [Request a Feature](#)
-- 💬 [Join Discussions](#)
+- 📖 [Read the Deployment Guide](./HOSTINGER-DEPLOYMENT.md)
+- 🐛 [Troubleshooting Guide](./CONNECTION-FAILED-FIX.md)
+- 💡 Open an issue for feature requests
+
+---
+
+## 🎯 Why This App?
+
+**Simple:**
+- No database setup
+- No complex configuration
+- Upload 2 files and you're done
+
+**Practical:**
+- Works on any PHP hosting
+- Data persists forever
+- Easy to backup
+
+**Flexible:**
+- Text input for real-world scenarios
+- Mobile-friendly
+- Works offline after initial load
+
+**Free:**
+- No ongoing costs
+- No third-party services
+- Own your data
 
 ---
 
