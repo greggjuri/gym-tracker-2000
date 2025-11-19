@@ -337,7 +337,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>💪 Gym Tracker 2000</h1>
+        <h1>💪 Gym Tracker</h1>
         
         <div class="sync-status">
             <div class="sync-indicator" id="sync-indicator"></div>
@@ -416,9 +416,10 @@
 
     <script>
         // Configuration
-           const API_URL = window.location.hostname === 'localhost' 
-       ? 'http://localhost:3000/api' 
-       : 'https://gym-tracker-2000.onrender.com/api';
+        // Simple relative path - works in root or subfolder
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8000/api.php'
+            : './api.php'; // Same folder as index.html
 
         // State
         let workouts = [];
@@ -451,15 +452,19 @@
         async function fetchWorkouts() {
             try {
                 updateSyncStatus('syncing', 'Loading...');
-                const response = await fetch(`${API_URL}/workouts`);
+                console.log('Fetching from:', `${API_URL}?path=/api/workouts`);
+                const response = await fetch(`${API_URL}?path=/api/workouts`);
+                console.log('Response status:', response.status);
                 if (!response.ok) throw new Error('Failed to fetch workouts');
                 workouts = await response.json();
+                console.log('Loaded workouts:', workouts.length);
                 updateSyncStatus('', 'Ready');
                 displayWorkouts();
                 displayStats();
                 updateExerciseList();
             } catch (error) {
                 console.error('Error fetching workouts:', error);
+                console.error('API_URL:', API_URL);
                 updateSyncStatus('error', 'Connection failed');
             }
         }
@@ -467,7 +472,7 @@
         async function saveWorkout(workout) {
             try {
                 updateSyncStatus('syncing', 'Saving...');
-                const response = await fetch(`${API_URL}/workouts`, {
+                const response = await fetch(`${API_URL}?path=/api/workouts`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -492,7 +497,7 @@
         async function deleteWorkoutAPI(id) {
             try {
                 updateSyncStatus('syncing', 'Deleting...');
-                const response = await fetch(`${API_URL}/workouts/${id}`, {
+                const response = await fetch(`${API_URL}?path=/api/workouts/${id}`, {
                     method: 'DELETE'
                 });
 
