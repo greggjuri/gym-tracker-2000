@@ -305,8 +305,6 @@ Let me know if you want this feature!
 5. **Browser cache?**
    - Hard refresh: Ctrl+Shift+R (or Cmd+Shift+R)
 
-See [CONNECTION-FAILED-FIX.md](./CONNECTION-FAILED-FIX.md) for detailed troubleshooting.
-
 ---
 
 ## 💰 Cost Breakdown
