@@ -97,8 +97,6 @@ gym-tracker/
 ├── data/                 # Data storage (auto-created)
 │   └── workouts.json    # Your workout data
 │
-├── HOSTINGER-DEPLOYMENT.md      # Deployment guide
-├── CONNECTION-FAILED-FIX.md     # Troubleshooting
 └── README.md                     # This file
 ```
 
@@ -371,7 +369,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-Created with 💪 for fitness enthusiasts
+Created by me with 💪 for fitness enthusiasts
 
 ---
 
@@ -381,16 +379,6 @@ Created with 💪 for fitness enthusiasts
 - No frameworks, no database, no complexity
 - Perfect for personal use
 - Thanks to all users and contributors!
-
----
-
-## 📞 Support
-
-Need help? Have questions?
-
-- 📖 [Read the Deployment Guide](./HOSTINGER-DEPLOYMENT.md)
-- 🐛 [Troubleshooting Guide](./CONNECTION-FAILED-FIX.md)
-- 💡 Open an issue for feature requests
 
 ---
 
