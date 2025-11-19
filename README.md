@@ -8,8 +8,6 @@ A modern, mobile-first workout tracking application with persistent data storage
 ![Platform](https://img.shields.io/badge/platform-web%20%7C%20mobile-lightgrey.svg)
 ![PHP](https://img.shields.io/badge/PHP-%3E%3D7.0-blue.svg)
 
-[Live Demo](#) | [Documentation](#installation) | [Report Bug](#) | [Request Feature](#)
-
 </div>
 
 ---
