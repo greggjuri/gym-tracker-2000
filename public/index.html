@@ -430,8 +430,12 @@
         const syncText = document.getElementById('sync-text');
         const formError = document.getElementById('form-error');
 
-        // Set today's date as default
-        document.getElementById('date').valueAsDate = new Date();
+        // Set today's date as default (using local date string to avoid timezone issues)
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('date').value = `${year}-${month}-${day}`;
 
         // Update sync status
         function updateSyncStatus(status, message) {
@@ -530,7 +534,11 @@
                 
                 // Reset form
                 document.getElementById('workout-form').reset();
-                document.getElementById('date').valueAsDate = new Date();
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                document.getElementById('date').value = `${year}-${month}-${day}`;
                 
                 // Show success
                 alert('Workout logged successfully! 💪');
