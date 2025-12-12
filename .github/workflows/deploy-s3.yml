@@ -23,11 +23,8 @@ jobs:
           aws-region: us-east-1
 
       - name: Sync public folder to S3
-              run: |
-                aws s3 sync public/ s3://jurigregg-static-site/gym \
-                  --delete \
-                  --exclude "*.md" \
-                  --exclude ".git/*"
+        run: |
+          aws s3 sync public/index.html s3://jurigregg-static-site/gym
 
       - name: Invalidate CloudFront
         run: |
