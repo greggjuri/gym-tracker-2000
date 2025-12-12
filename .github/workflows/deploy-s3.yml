@@ -22,9 +22,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Sync index.html to S3
-        run: |
-          aws s3 cp index.html s3://jurigregg-static-site/gym/index.html
+      - name: Sync public folder to S3
+              run: |
+                aws s3 sync public/ s3://jurigregg-static-site/gym \
+                  --delete \
+                  --exclude "*.md" \
+                  --exclude ".git/*"
 
       - name: Invalidate CloudFront
         run: |
