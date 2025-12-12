@@ -24,7 +24,7 @@ jobs:
 
       - name: Sync index.html to S3
         run: |
-          aws s3 cp /public/index.html s3://jurigregg-static-site/gym/index.html
+          aws s3 cp index.html s3://jurigregg-static-site/gym/index.html
 
       - name: Invalidate CloudFront
         run: |
