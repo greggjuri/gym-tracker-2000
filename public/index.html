@@ -418,8 +418,8 @@
         // Configuration
         // Simple relative path - works in root or subfolder
         const API_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000/api.php'
-            : './api.php'; // Same folder as index.html
+            ? 'http://localhost:3000/api/gym'
+            : 'https://api.jurigregg.com/api/gym';
 
         // State
         let workouts = [];
@@ -456,8 +456,8 @@
         async function fetchWorkouts() {
             try {
                 updateSyncStatus('syncing', 'Loading...');
-                console.log('Fetching from:', `${API_URL}?path=/api/workouts`);
-                const response = await fetch(`${API_URL}?path=/api/workouts`);
+                console.log('Fetching from:', `${API_URL}/workouts`);
+                const response = await fetch(`${API_URL}/workouts`);
                 console.log('Response status:', response.status);
                 if (!response.ok) throw new Error('Failed to fetch workouts');
                 workouts = await response.json();
@@ -476,7 +476,7 @@
         async function saveWorkout(workout) {
             try {
                 updateSyncStatus('syncing', 'Saving...');
-                const response = await fetch(`${API_URL}?path=/api/workouts`, {
+                const response = await fetch(`${API_URL}/workouts`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -501,7 +501,7 @@
         async function deleteWorkoutAPI(id) {
             try {
                 updateSyncStatus('syncing', 'Deleting...');
-                const response = await fetch(`${API_URL}?path=/api/workouts/${id}`, {
+                const response = await fetch(`${API_URL}/workouts/${id}`, {
                     method: 'DELETE'
                 });
 
